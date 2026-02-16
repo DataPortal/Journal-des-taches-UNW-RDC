@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Suivi & Évaluation — Tâches</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <div>
+        <h1>Suivi & Évaluation</h1>
+        <p class="muted">Liste des tâches + filtres</p>
+      </div>
+      <nav class="nav">
+        <a href="index.html">Dashboard</a>
+        <a class="active" href="tasks.html">Tâches</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Filtres</h2>
+      <div class="filters">
+        <label>
+          <span>Date</span>
+          <select id="fDate"></select>
+        </label>
+        <label>
+          <span>Bureau</span>
+          <select id="fBureau"></select>
+        </label>
+        <label>
+          <span>Résultat</span>
+          <select id="fResultat"></select>
+        </label>
+        <label class="grow">
+          <span>Recherche</span>
+          <input id="fSearch" type="text" placeholder="agent, tâche, code activité…" />
+        </label>
+        <button class="button" id="btnReset">Réinitialiser</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row row-between">
+        <h2>Table des tâches</h2>
+        <div class="muted" id="countInfo">—</div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table" id="tasksTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Bureau</th>
+              <th>Agent</th>
+              <th>Tâche</th>
+              <th>Résultat</th>
+              <th>Code</th>
+              <th>Commentaire</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    window.App.initTasks();
+  </script>
+</body>
+</html>
