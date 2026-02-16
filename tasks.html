@@ -11,7 +11,7 @@
     <div class="container">
       <div>
         <h1>Suivi & Évaluation</h1>
-        <p class="muted">Liste des tâches + filtres</p>
+        <p class="muted">Liste des tâches + filtres (Année / Mois)</p>
       </div>
       <nav class="nav">
         <a href="index.html">Dashboard</a>
@@ -23,23 +23,33 @@
   <main class="container">
     <section class="card">
       <h2>Filtres</h2>
+
       <div class="filters">
         <label>
-          <span>Date</span>
-          <select id="fDate"></select>
+          <span>Année</span>
+          <select id="fYear"></select>
         </label>
+
+        <label>
+          <span>Mois</span>
+          <select id="fMonth"></select>
+        </label>
+
         <label>
           <span>Bureau</span>
           <select id="fBureau"></select>
         </label>
+
         <label>
           <span>Résultat</span>
           <select id="fResultat"></select>
         </label>
+
         <label class="grow">
           <span>Recherche</span>
           <input id="fSearch" type="text" placeholder="agent, tâche, code activité…" />
         </label>
+
         <button class="button" id="btnReset">Réinitialiser</button>
       </div>
     </section>
