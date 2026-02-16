@@ -16,6 +16,15 @@ window.App = (() => {
     return String(s ?? '').toLowerCase().trim();
   }
 
+  function escapeHtml(str){
+    return String(str ?? '')
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;')
+      .replaceAll("'","&#039;");
+  }
+
   function countBy(arr, keyFn) {
     const m = new Map();
     for (const x of arr) {
@@ -31,13 +40,21 @@ window.App = (() => {
     return `<span class="badge ${cls}">${escapeHtml(v || '—')}</span>`;
   }
 
-  function escapeHtml(str){
-    return String(str)
-      .replaceAll('&','&amp;')
-      .replaceAll('<','&lt;')
-      .replaceAll('>','&gt;')
-      .replaceAll('"','&quot;')
-      .replaceAll("'","&#039;");
+  // ---- Date helpers (YYYY-MM-DD) ----
+  function getYear(d) {
+    const s = String(d ?? '');
+    return s.includes('-') ? s.split('-')[0] : '';
+  }
+  function getMonth(d) {
+    const s = String(d ?? '');
+    return s.includes('-') ? s.split('-')[1] : '';
+  }
+  function monthLabel(mm) {
+    const map = {
+      "01":"Janvier","02":"Février","03":"Mars","04":"Avril","05":"Mai","06":"Juin",
+      "07":"Juillet","08":"Août","09":"Septembre","10":"Octobre","11":"Novembre","12":"Décembre"
+    };
+    return map[mm] || mm || '—';
   }
 
   // ---------------- Dashboard (index.html) ----------------
@@ -57,12 +74,10 @@ window.App = (() => {
     const refreshed = new Date().toLocaleString('fr-FR');
     document.getElementById('lastUpdated').textContent = `Dernière lecture: ${refreshed}`;
 
-    // Top bureaux
     const topBureaux = countBy(data, d => d.bureau || '—').slice(0, 5);
     const ulB = document.getElementById('topBureaux');
     ulB.innerHTML = topBureaux.map(([k,v]) => `<li><b>${escapeHtml(k)}</b> — ${v}</li>`).join('');
 
-    // Top agents
     const topAgents = countBy(data, d => d.agent || '—').slice(0, 5);
     const ulA = document.getElementById('topAgents');
     ulA.innerHTML = topAgents.map(([k,v]) => `<li><b>${escapeHtml(k)}</b> — ${v}</li>`).join('');
@@ -72,18 +87,27 @@ window.App = (() => {
   async function initTasks() {
     const data = await loadData();
 
-    const fDate = document.getElementById('fDate');
+    const fYear = document.getElementById('fYear');
+    const fMonth = document.getElementById('fMonth');
     const fBureau = document.getElementById('fBureau');
     const fResultat = document.getElementById('fResultat');
     const fSearch = document.getElementById('fSearch');
     const btnReset = document.getElementById('btnReset');
 
-    // Build filter options
-    const dates = ['Tous', ...uniq(data.map(d => d.date)).sort().reverse()];
-    const bureaux = ['Tous', ...uniq(data.map(d => d.bureau)).sort()];
-    const resultats = ['Tous', ...uniq(data.map(d => d.resultat)).sort()];
+    // Options Year/Month from date (YYYY-MM-DD)
+    const years = ["Tous", ...uniq(data.map(d => getYear(d.date))).sort().reverse()];
+    const months = ["Tous", ...uniq(data.map(d => getMonth(d.date))).sort()];
 
-    fDate.innerHTML = dates.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
+    fYear.innerHTML = years.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
+    fMonth.innerHTML = months.map(v => {
+      const label = (v === "Tous") ? "Tous" : monthLabel(v);
+      return `<option value="${escapeHtml(v)}">${escapeHtml(label)}</option>`;
+    }).join('');
+
+    // Bureau / Resultat
+    const bureaux = ["Tous", ...uniq(data.map(d => d.bureau)).sort()];
+    const resultats = ["Tous", ...uniq(data.map(d => d.resultat)).sort()];
+
     fBureau.innerHTML = bureaux.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
     fResultat.innerHTML = resultats.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
 
@@ -91,16 +115,26 @@ window.App = (() => {
     const countInfo = document.getElementById('countInfo');
 
     function applyFilters() {
-      const vDate = fDate.value;
+      const vYear = fYear.value;
+      const vMonth = fMonth.value;
       const vBureau = fBureau.value;
       const vRes = fResultat.value;
       const q = normalize(fSearch.value);
 
       let filtered = data.slice();
 
-      if (vDate !== 'Tous') filtered = filtered.filter(d => String(d.date) === vDate);
-      if (vBureau !== 'Tous') filtered = filtered.filter(d => String(d.bureau) === vBureau);
-      if (vRes !== 'Tous') filtered = filtered.filter(d => String(d.resultat) === vRes);
+      if (vYear !== 'Tous') {
+        filtered = filtered.filter(d => getYear(d.date) === vYear);
+      }
+      if (vMonth !== 'Tous') {
+        filtered = filtered.filter(d => getMonth(d.date) === vMonth);
+      }
+      if (vBureau !== 'Tous') {
+        filtered = filtered.filter(d => String(d.bureau) === vBureau);
+      }
+      if (vRes !== 'Tous') {
+        filtered = filtered.filter(d => String(d.resultat) === vRes);
+      }
 
       if (q) {
         filtered = filtered.filter(d => {
@@ -128,11 +162,12 @@ window.App = (() => {
     }
 
     // Events
-    [fDate, fBureau, fResultat].forEach(el => el.addEventListener('change', applyFilters));
+    [fYear, fMonth, fBureau, fResultat].forEach(el => el.addEventListener('change', applyFilters));
     fSearch.addEventListener('input', applyFilters);
 
     btnReset.addEventListener('click', () => {
-      fDate.value = 'Tous';
+      fYear.value = 'Tous';
+      fMonth.value = 'Tous';
       fBureau.value = 'Tous';
       fResultat.value = 'Tous';
       fSearch.value = '';
