@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Suivi & Évaluation — Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <div>
+        <h1>Suivi & Évaluation</h1>
+        <p class="muted">Tableau de bord (données Kobo → data.json)</p>
+      </div>
+      <nav class="nav">
+        <a class="active" href="index.html">Dashboard</a>
+        <a href="tasks.html">Tâches</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <div class="row row-between">
+        <h2>Indicateurs clés</h2>
+        <div class="muted" id="lastUpdated">Chargement…</div>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi">
+          <div class="kpi-label">Total tâches</div>
+          <div class="kpi-value" id="kpiTotal">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">En cours</div>
+          <div class="kpi-value" id="kpiOngoing">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Terminées</div>
+          <div class="kpi-value" id="kpiDone">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Agents actifs</div>
+          <div class="kpi-value" id="kpiAgents">—</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row row-between">
+        <h2>Aperçu rapide</h2>
+        <a class="button" href="tasks.html">Voir la table</a>
+      </div>
+
+      <div class="grid2">
+        <div>
+          <h3 class="h3">Top bureaux</h3>
+          <ul class="list" id="topBureaux"></ul>
+        </div>
+        <div>
+          <h3 class="h3">Top agents</h3>
+          <ul class="list" id="topAgents"></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    window.App.initDashboard();
+  </script>
+</body>
+</html>
