@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Suivi & Évaluation — Tâches</title>
+  <title>Suivi & Évaluation — Dashboard</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -11,92 +11,136 @@
     <div class="container">
       <div class="brand">
         <h1>Suivi & Évaluation</h1>
-        <p class="muted">Table des tâches — filtres Année / Mois / Bureau / Résultat</p>
+        <p class="muted">Dashboard global UN Women — synthèse des activités</p>
       </div>
       <nav class="nav">
-        <a href="index.html">Dashboard</a>
-        <a class="active" href="tasks.html">Tâches</a>
+        <a class="active" href="index.html">Dashboard</a>
+        <a href="tasks.html">Tâches</a>
       </nav>
     </div>
   </header>
 
   <main class="container">
-    <!-- Filters -->
+
+    <!-- FILTRES GLOBAUX -->
     <section class="card">
       <div class="row row-between">
-        <h2>Filtres</h2>
-        <div class="muted">Affinez la période et les résultats</div>
+        <div>
+          <h2>Filtres globaux</h2>
+          <p class="muted" style="margin:0">Les statistiques ci-dessous s’ajustent selon la période et les critères.</p>
+        </div>
+        <div class="muted" id="scopeInfo">—</div>
       </div>
 
       <div class="filters" style="margin-top:10px">
         <label>
           <span>Année</span>
-          <select id="fYear"></select>
+          <select id="dYear"></select>
         </label>
-
         <label>
           <span>Mois</span>
-          <select id="fMonth"></select>
+          <select id="dMonth"></select>
         </label>
-
         <label>
           <span>Bureau</span>
-          <select id="fBureau"></select>
+          <select id="dBureau"></select>
         </label>
-
         <label>
           <span>Résultat</span>
-          <select id="fResultat"></select>
+          <select id="dResultat"></select>
         </label>
-
         <label class="grow">
           <span>Recherche</span>
-          <input id="fSearch" type="text" placeholder="agent, tâche, code activité…" />
+          <input id="dSearch" type="text" placeholder="agent, tâche, code activité…" />
         </label>
-
-        <button class="button" id="btnReset">Réinitialiser</button>
+        <button class="button" id="dReset">Réinitialiser</button>
+        <a class="button primary" href="tasks.html">Voir la table</a>
       </div>
+
+      <div class="muted" id="lastUpdated" style="margin-top:10px">Chargement…</div>
     </section>
 
-    <!-- Table -->
+    <!-- KPIs -->
     <section class="card">
       <div class="row row-between">
-        <div>
-          <h2>Table des tâches</h2>
-          <p class="muted" style="margin:0">Chaque ligne représente une tâche (repeat aplati).</p>
+        <h2>Indicateurs clés (global)</h2>
+        <div class="muted" id="kpiInfo">—</div>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi">
+          <div class="kpi-label">Total tâches</div>
+          <div class="kpi-value accent" id="kpiTotal">—</div>
         </div>
-        <div class="muted" id="countInfo">—</div>
+        <div class="kpi">
+          <div class="kpi-label">En cours</div>
+          <div class="kpi-value" id="kpiOngoing">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Terminées</div>
+          <div class="kpi-value" id="kpiDone">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Agents actifs</div>
+          <div class="kpi-value" id="kpiAgents">—</div>
+        </div>
       </div>
 
-      <div class="table-wrap" style="margin-top:12px">
-        <table class="table" id="tasksTable">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Bureau</th>
-              <th>Agent</th>
-              <th>Tâche</th>
-              <th>Résultat</th>
-              <th>Code</th>
-              <th>Commentaire</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div class="kpis" style="margin-top:12px">
+        <div class="kpi">
+          <div class="kpi-label">Bureaux couverts</div>
+          <div class="kpi-value" id="kpiBureaux">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Tâches avec lien activité = Oui</div>
+          <div class="kpi-value" id="kpiLinked">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Tâches avec code activité</div>
+          <div class="kpi-value" id="kpiWithCode">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Période couverte</div>
+          <div class="kpi-value" id="kpiPeriod">—</div>
+        </div>
       </div>
     </section>
 
-    <!-- Footer -->
-    <section class="card" style="padding:12px 16px">
-      <div class="muted">
-        Astuce: utilisez la recherche pour filtrer par mots-clés (ex: “atelier”, “plateforme”, “A45D8”).
+    <!-- Répartitions -->
+    <section class="card">
+      <div class="row row-between">
+        <h2>Répartitions</h2>
+        <div class="muted">Top 10</div>
+      </div>
+
+      <div class="grid2" style="margin-top:12px">
+        <div>
+          <h3 class="h3">Par bureau</h3>
+          <ul class="list" id="byBureau"></ul>
+        </div>
+        <div>
+          <h3 class="h3">Par agent</h3>
+          <ul class="list" id="byAgent"></ul>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:12px">
+        <div>
+          <h3 class="h3">Par résultat</h3>
+          <ul class="list" id="byResultat"></ul>
+        </div>
+        <div>
+          <h3 class="h3">Par mois</h3>
+          <ul class="list" id="byMonth"></ul>
+        </div>
       </div>
     </section>
+
   </main>
 
   <script src="app.js"></script>
   <script>
-    window.App.initTasks();
+    window.App.initDashboardGlobal();
   </script>
 </body>
 </html>
