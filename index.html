@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Suivi & Évaluation — Dashboard</title>
+  <title>Suivi & Évaluation — Tâches</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -11,85 +11,92 @@
     <div class="container">
       <div class="brand">
         <h1>Suivi & Évaluation</h1>
-        <p class="muted">Dashboard UN Women — suivi des tâches & résultats</p>
+        <p class="muted">Table des tâches — filtres Année / Mois / Bureau / Résultat</p>
       </div>
       <nav class="nav">
-        <a class="active" href="index.html">Dashboard</a>
-        <a href="tasks.html">Tâches</a>
+        <a href="index.html">Dashboard</a>
+        <a class="active" href="tasks.html">Tâches</a>
       </nav>
     </div>
   </header>
 
   <main class="container">
-    <!-- KPIs -->
+    <!-- Filters -->
     <section class="card">
       <div class="row row-between">
-        <h2>Indicateurs clés</h2>
-        <div class="muted" id="lastUpdated">Chargement…</div>
+        <h2>Filtres</h2>
+        <div class="muted">Affinez la période et les résultats</div>
       </div>
 
-      <div class="kpis">
-        <div class="kpi">
-          <div class="kpi-label">Total tâches</div>
-          <div class="kpi-value accent" id="kpiTotal">—</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">En cours</div>
-          <div class="kpi-value" id="kpiOngoing">—</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Terminées</div>
-          <div class="kpi-value" id="kpiDone">—</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Agents actifs</div>
-          <div class="kpi-value" id="kpiAgents">—</div>
-        </div>
+      <div class="filters" style="margin-top:10px">
+        <label>
+          <span>Année</span>
+          <select id="fYear"></select>
+        </label>
+
+        <label>
+          <span>Mois</span>
+          <select id="fMonth"></select>
+        </label>
+
+        <label>
+          <span>Bureau</span>
+          <select id="fBureau"></select>
+        </label>
+
+        <label>
+          <span>Résultat</span>
+          <select id="fResultat"></select>
+        </label>
+
+        <label class="grow">
+          <span>Recherche</span>
+          <input id="fSearch" type="text" placeholder="agent, tâche, code activité…" />
+        </label>
+
+        <button class="button" id="btnReset">Réinitialiser</button>
       </div>
     </section>
 
-    <!-- Quick insights -->
+    <!-- Table -->
     <section class="card">
       <div class="row row-between">
         <div>
-          <h2>Aperçu</h2>
-          <p class="muted" style="margin:0">Synthèse rapide par bureau et par agent.</p>
+          <h2>Table des tâches</h2>
+          <p class="muted" style="margin:0">Chaque ligne représente une tâche (repeat aplati).</p>
         </div>
-        <a class="button primary" href="tasks.html">Ouvrir la table</a>
+        <div class="muted" id="countInfo">—</div>
       </div>
 
-      <div class="grid2" style="margin-top:12px">
-        <div>
-          <h3 class="h3">Top bureaux</h3>
-          <ul class="list" id="topBureaux"></ul>
-        </div>
-        <div>
-          <h3 class="h3">Top agents</h3>
-          <ul class="list" id="topAgents"></ul>
-        </div>
+      <div class="table-wrap" style="margin-top:12px">
+        <table class="table" id="tasksTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Bureau</th>
+              <th>Agent</th>
+              <th>Tâche</th>
+              <th>Résultat</th>
+              <th>Code</th>
+              <th>Commentaire</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
     </section>
 
     <!-- Footer -->
     <section class="card" style="padding:12px 16px">
-      <div class="row row-between" style="align-items:flex-start">
-        <div>
-          <div style="font-weight:900">Notes</div>
-          <div class="muted" style="margin-top:6px">
-            Les données sont mises à jour depuis Kobo et publiées sur GitHub Pages.
-          </div>
-        </div>
-        <div class="muted" style="text-align:right">
-          Source: KoboToolbox<br/>
-          Version: Web (GitHub Pages)
-        </div>
+      <div class="muted">
+        Astuce: utilisez la recherche pour filtrer par mots-clés (ex: “atelier”, “plateforme”, “A45D8”).
       </div>
     </section>
   </main>
 
   <script src="app.js"></script>
   <script>
-    window.App.initDashboard();
+    window.App.initTasks();
   </script>
 </body>
 </html>
